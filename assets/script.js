@@ -2,6 +2,9 @@
 /** this varible set the start-btn as the startButton */
 const startButton = document.getElementById('start-btn')
 
+/** this varible set the next-btn as the nextButton */
+const nextButton = document.getElementById('next-btn')
+
 /** this variable lets us select the question container  */
 const questionContainerElement = document.getElementById('question-container')
 
@@ -15,8 +18,22 @@ const answerButtonElement = document.getElementById('answer-buttons')
 let shuffledQuestions, currentQuestionIndex
 
 
+/** Event listeners for the Start and Next buttons */
 startButton.addEventListener('click', startGame)
-    
+nextButton.addEventListener('click', () => {
+    currentQuestionIndex++
+    setNextQuestion()
+})
+   
+function increamentScore() {
+    let oldScore = parseInt(document.getElementById("score").innerText);
+    document.getElementById("score").innerText = ++oldScore;
+}
+
+function increamentWrongAnswer() {
+    let oldScore = parseInt(document.getElementById("incorrect").innerText);
+    document.getElementById("incorrect").innerText = ++oldScore;
+}
 
 
 /**
@@ -39,9 +56,14 @@ function startGame() {
  * are correct or not.
  */
 function setNextQuestion() {
+    resetState()
     showQuestion(shuffledQuestions[currentQuestionIndex])
 }
 
+
+function checkAnswer() {
+    
+}
 
 
 
@@ -49,7 +71,7 @@ function setNextQuestion() {
  * This function will run to get the innerText of the 
  * question element and replace it with the question from the array of questions
  */
-function showQuestion(question) {
+function showQuestion(questions) {
     questionElement.innerText = questions.question
     questions.answers.forEach(answer => {
         const button = document.createElement('button')
@@ -63,14 +85,61 @@ function showQuestion(question) {
     })
 }
 
-
 /**
- * This will let the user select the correct answer
+ * This function will reset the state back to normal after the 
+ * quiz has run through
  */
-function selectAnswer() {
-
+function resetState() {
+    clearStatusClass(document.body)
+    nextButton.classList.add('hide')
+    while (answerButtonElement.firstChild) {
+        answerButtonElement.removeChild
+        (answerButtonElement.firstChild)
+    }
 }
 
+
+/**
+ * This will let the user select the correct answer and then show the restart 
+ * button if there is no more questions.
+ * 
+ */
+function selectAnswer(e) {
+    const selectedButton = e.target
+    const correct = selectedButton.dataset.correct
+    setStatusClass(document.body, correct)
+    Array.from(answerButtonElement.children).forEach(button => {
+        setStatusClass(button, button.dataset.correct)
+    })
+    if (shuffledQuestions.length > currentQuestionIndex + 1) {
+        nextButton.classList.remove('hide')
+    } else {
+        startButton.innerText = 'Restart'
+        startButton.classList.remove('hide')
+    }
+    
+}
+/**
+ * This function will set the element with the correct or the wrong 
+ * element (colours) if they are correct or wrong
+ */
+function setStatusClass(element, correct) {
+    clearStatusClass(element)
+    if (correct) {
+        element.classList.add('correct')
+    } else {
+        element.classList.add('wrong')
+    }
+}
+
+/**
+ * This function will clear the status class and remove the 
+ * correct or wrong colours that has been added on
+ */
+function clearStatusClass(element) {
+    element.classList.remove('correct')
+    element.classList.remove('wrong')
+}
 
 /**
  * questions for the quiz with the correct answer as true
