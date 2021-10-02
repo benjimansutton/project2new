@@ -5,6 +5,9 @@ const startButton = document.getElementById('start-btn')
 /** this varible set the next-btn as the nextButton */
 const nextButton = document.getElementById('next-btn')
 
+/** this varible set the next-btn as the nextButton */
+const userName = document.getElementById('uname')
+
 /** this variable lets us select the question container  */
 const questionContainerElement = document.getElementById('question-container')
 
@@ -140,6 +143,31 @@ function clearStatusClass(element) {
     element.classList.remove('correct')
     element.classList.remove('wrong')
 }
+
+
+
+/**
+ * This function saves the username into an array so we can get the object
+ * later on during the game.
+ */
+function Login() {
+    if (typeof(Storage) !== "undefined") {
+        // Store
+        sessionStorage.setItem("uname", "Smith");
+        showUsername();
+}
+
+
+/**
+ * This function shows the username that the user has entered
+ */
+function showUsername() {
+    document.getElementById("uname").innerHTML = sessionStorage.getItem('uname')
+}
+  userName.classList.remove('hide')
+}
+
+
 
 /**
  * questions for the quiz with the correct answer as true
